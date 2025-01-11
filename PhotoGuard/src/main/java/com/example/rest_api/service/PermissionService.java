@@ -1,7 +1,7 @@
 package com.example.rest_api.service;
 
-import com.example.rest_api.database.model.PermissionEntity;
-import com.example.rest_api.database.repository.PermissionRepository;
+import com.example.rest_api.database.usersdb.model.PermissionEntity;
+import com.example.rest_api.database.usersdb.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

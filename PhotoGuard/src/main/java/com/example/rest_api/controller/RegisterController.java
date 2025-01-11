@@ -1,8 +1,8 @@
 package com.example.rest_api.controller;
 
-import com.example.rest_api.database.model.Role;
-import com.example.rest_api.database.model.RoleEntity;
-import com.example.rest_api.database.model.UserEntity;
+import com.example.rest_api.database.usersdb.model.Role;
+import com.example.rest_api.database.usersdb.model.RoleEntity;
+import com.example.rest_api.database.usersdb.model.UserEntity;
 import com.example.rest_api.service.RoleService;
 import com.example.rest_api.service.UserService;
 import com.example.rest_api.service.UserValidatorService;

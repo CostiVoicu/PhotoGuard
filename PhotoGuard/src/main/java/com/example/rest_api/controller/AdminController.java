@@ -55,4 +55,10 @@ public class AdminController {
         // Redirect back to the user management page or wherever you want
         return "redirect:/admin/users";
     }
+
+    @PostMapping("/roles/{id}/delete")
+    public String deleteRole(@PathVariable Long id) {
+        roleService.deleteRoleById(id);  // Assuming this service method deletes the role
+        return "redirect:/admin/roles";  // Redirect back to the roles page
+    }
 }

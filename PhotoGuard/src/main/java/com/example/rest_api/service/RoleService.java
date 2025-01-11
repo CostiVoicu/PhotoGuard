@@ -21,6 +21,10 @@ public class RoleService {
         this.roleRepository.save(role);
     }
 
+    public void deleteRoleById(Long id) {
+        roleRepository.deleteById(id);
+    }
+
     public Boolean existsByName(String name) {
         return roleRepository.existsByName(name);
     }

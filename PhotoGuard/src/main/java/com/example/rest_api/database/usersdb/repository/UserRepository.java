@@ -1,15 +1,15 @@
 package com.example.rest_api.database.usersdb.repository;
 
 import com.example.rest_api.database.usersdb.model.UserEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
+@Transactional("primaryTransactionManager")
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     //@Query(value = "SELECT user FROM UserEntity user WHERE user.username=:username")
     //@Query(value = "SELECT * FROM app_user WHERE username=:username", nativeQuery = true)

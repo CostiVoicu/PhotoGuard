@@ -25,6 +25,9 @@
                 </td>
                 <td class="px-4 py-2 text-center space-x-2">
                     <form th:action="@{/admin/users/{id}/roles(id=${user.id})}" method="post" class="inline-block">
+                        <select name="role" required>
+                            <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        </select>
                         <button type="submit"
                                 class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none">
                             Update Roles

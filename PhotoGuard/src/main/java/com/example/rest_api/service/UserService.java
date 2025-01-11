@@ -1,5 +1,6 @@
 package com.example.rest_api.service;
 
+import com.example.rest_api.database.usersdb.model.RoleEntity;
 import com.example.rest_api.database.usersdb.model.UserEntity;
 import com.example.rest_api.database.usersdb.repository.RoleRepository;
 import com.example.rest_api.database.usersdb.repository.UserRepository;
@@ -77,6 +78,24 @@ public class UserService extends OidcUserService implements UserDetailsService {
         AuthenticatedUser authenticatedUser = optUser.get().toAuthenticatedUser();
         authenticatedUser.setIdToken(oidcUser.getIdToken());
         return authenticatedUser;
+    }
+
+    // Method to update the user role
+    public void updateUserRole(Long userId, String roleName) {
+        // Find the user by ID
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Find the role by name
+        RoleEntity role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        // Update the user's roles (remove old roles if needed and add the new one)
+        user.getRoles().clear(); // Clear the existing roles (optional, depending on your business logic)
+        user.addRole(role); // Add the new role
+
+        // Save the updated user back to the repository
+        userRepository.save(user);
     }
 
     /* Queries */

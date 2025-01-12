@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Roles</title>
+    <link rel="stylesheet" href="/path-to-your-css.css">
+</head>
+<body>
+<h1>Update Roles for User</h1>
+
+<p>User: <span th:text="${user.username}"></span> (<span th:text="${user.email}"></span>)</p>
+
+<form th:action="@{/admin/users/{id}/update-roles(id=${user.id})}" method="post">
+    <div>
+        <h3>Roles:</h3>
+        <ul>
+            <li th:each="role : ${roles}">
+                <input type="checkbox"
+                       th:value="${role.name}"
+                       th:checked="${user.roles.contains(role)}"
+                       name="roles">
+                <span th:text="${role.name}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <button type="submit">Update Roles</button>
+</form>
+
+<a th:href="@{/admin/users}">Back to User Management</a>
+</body>
+</html>

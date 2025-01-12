@@ -81,21 +81,12 @@ public class UserService extends OidcUserService implements UserDetailsService {
     }
 
     // Method to update the user role
-    public void updateUserRole(Long userId, String roleName) {
-        // Find the user by ID
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public void updateUserRoles(Long userId, List<String> roleNames) {
+        UserEntity user = findById(userId);
 
-        // Find the role by name
-        RoleEntity role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        // Update the user's roles (remove old roles if needed and add the new one)
-        user.getRoles().clear(); // Clear the existing roles (optional, depending on your business logic)
-        user.addRole(role); // Add the new role
-
-        // Save the updated user back to the repository
-        userRepository.save(user);
+        List<RoleEntity> roles = roleRepository.findAllByNameIn(roleNames); // Assuming a method that fetches roles by names
+        user.setRoles(roles); // Update roles
+        userRepository.save(user); // Save updated user
     }
 
     /* Queries */
@@ -111,5 +102,9 @@ public class UserService extends OidcUserService implements UserDetailsService {
 
     public List<UserEntity> findAll() {
         return this.userRepository.findAll();
+    }
+
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

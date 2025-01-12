@@ -15,10 +15,11 @@
         <ul>
             <li th:each="role : ${roles}">
                 <input type="checkbox"
+                       th:id="'role-' + ${role.name}"
                        th:value="${role.name}"
                        th:checked="${user.roles.contains(role)}"
                        name="roles">
-                <span th:text="${role.name}"></span>
+                <label th:for="'role-' + ${role.name}" th:text="${role.name}"></label>
             </li>
         </ul>
     </div>

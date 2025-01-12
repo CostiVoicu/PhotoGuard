@@ -32,24 +32,17 @@ public class SecurityConfig {
         DefaultSecurityFilterChain build = http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/login/**", "/register", "/oauth2/**").permitAll()
-                        /* Dynamic trough AuthorizationManager */
                         .anyRequest().access(dynamicAuthorizationManager)
-                        /* Hardcoded Examples */
-                        //.requestMatchers(new AntPathRequestMatcher("/admin", "GET")).hasAuthority("ADMIN")
-                        //.requestMatchers(new AntPathRequestMatcher("/admin", "POST")).hasAuthority("ADMIN")
-                        //.anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(userService))
                         .successHandler(successHandler)
-                        //.defaultSuccessUrl("/home")
                         )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .usernameParameter("email")
                         .successHandler(successHandler)
-                        //.defaultSuccessUrl("/home")
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")

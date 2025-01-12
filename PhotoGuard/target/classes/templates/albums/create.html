@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create Album</title>
+</head>
+<body>
+<h1>Create Album</h1>
+<form action="/albums/add" method="post">
+  <!-- Hidden field for userId -->
+  <input type="hidden" name="userId" th:value="${userId}">
+
+  <label for="albumName">Album Name:</label>
+  <input type="text" id="albumName" name="name" required>
+
+  <label for="albumDescription">Description:</label>
+  <textarea id="albumDescription" name="description" required></textarea>
+
+  <button type="submit">Create Album</button>
+</form>
+<button onclick="window.location.href='/home';">Cancel</button>
+</body>
+</html>

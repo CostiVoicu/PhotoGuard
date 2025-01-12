@@ -89,6 +89,10 @@ public class UserService extends OidcUserService implements UserDetailsService {
         userRepository.save(user); // Save updated user
     }
 
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     /* Queries */
     public UserEntity save(UserEntity user) {
         /* Encrypt password */

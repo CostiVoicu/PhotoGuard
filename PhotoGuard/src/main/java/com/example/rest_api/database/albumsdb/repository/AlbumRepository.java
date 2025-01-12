@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+import java.util.List;
+
 @Transactional("secondaryTransactionManager")
+@Repository
 public interface AlbumRepository extends JpaRepository<AlbumEntity, Long> {
-
-
+    List<AlbumEntity> findByNameContainingIgnoreCase(String name);
 }

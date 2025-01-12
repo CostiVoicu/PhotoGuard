@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" href="/path-to-your-css.css">
 </head>
 <body>
 <h1>Welcome, <span th:text="${username}">User</span>!</h1>
-<h2>Home - SUCCESS</h2>
-<table>
-    <thead>
-    <tr>
-        <th>User Info</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${username}">Authenticated User</td>
-    </tr>
-    </tbody>
-</table>
-<a href="/logout">Logout</a>
+
+<!-- Search Bar -->
+<form th:action="@{/home}" method="get">
+    <input type="text" name="search" th:value="${search}" placeholder="Search albums">
+    <button type="submit">Search</button>
+</form>
+
+<button onclick="window.location.href='/home/albums/create';">Create Album</button>
+
+<!-- Album List -->
+<h2>Album List</h2>
+<ul>
+    <li th:each="album : ${albums}">
+        <h3 th:text="${album.name}"></h3>
+        <p th:text="${album.description}"></p>
+        <form th:action="@{/home/albums/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
 </body>
 </html>

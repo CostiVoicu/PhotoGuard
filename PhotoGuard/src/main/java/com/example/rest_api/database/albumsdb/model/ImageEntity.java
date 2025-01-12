@@ -20,8 +20,9 @@ public class ImageEntity {
     @JoinColumn(name = "album_id", nullable = false)
     private AlbumEntity album;
 
-    @Column(name="file_path",nullable = false)
-    private String filePath; // Path where the file is stored
+    @Lob
+    @Column(name = "data", nullable = false)
+    private byte[] data; // Store the image file as a BLOB
 
     @Column(nullable = false)
     private String name;

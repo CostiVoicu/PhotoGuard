@@ -1,39 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-user.html}">
 <head>
     <title>Home</title>
     <link rel="stylesheet" href="/path-to-your-css.css">
 </head>
 <body>
 
-<form th:action="@{/logout}" method="post" class="w-full">
-    <button type="submit">
-        Logout
-    </button>
-</form>
+<div layout:fragment="content">
 
-<h1>Welcome, <span th:text="${username}">User</span>!</h1>
-
-<!-- Search Bar -->
-<form th:action="@{/home}" method="get">
-    <input type="text" name="search" th:value="${search}" placeholder="Search albums">
-    <button type="submit">Search</button>
-</form>
-
-<button onclick="window.location.href='/home/album/create';">Create Album</button>
-
-<!-- Album List -->
-<h2>Album List</h2>
-<ul>
-    <li th:each="album : ${albums}">
-        <h3>
-            <a th:href="@{/album/{name}(name=${album.name})}" th:text="${album.name}"></a>
-        </h3>
-        <p th:text="${album.description}"></p>
-        <form th:action="@{/home/album/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
-            <button type="submit">Delete</button>
+    <header class="flex items-center justify-between mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">Welcome, <span th:text="${username}"></span>!</h1>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                Logout
+            </button>
         </form>
-    </li>
-</ul>
+    </header>
+
+    <section class="mb-8">
+        <form th:action="@{/home}" method="get" class="flex items-center w-full">
+            <input type="text" name="search" th:value="${search}" placeholder="Search albums" class="w-full rounded-md px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+            <button type="submit" class="ml-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                Search
+            </button>
+        </form>
+    </section>
+
+    <div class="flex justify-end mb-8">
+        <button onclick="window.location.href='/home/album/create';" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+            Create Album
+        </button>
+    </div>
+
+    <h2>Album List</h2>
+
+    <ul class="divide-y divide-gray-200">
+        <li th:each="album : ${albums}" class="py-4 px-4 hover:bg-gray-100 transition">
+            <h3>
+                <a th:href="@{/album/{name}(name=${album.name})}" th:text="${album.name}" class="text-lg font-medium text-gray-900"></a>
+            </h3>
+            <p th:text="${album.description}" class="text-gray-600"></p>
+            <div class="flex items-center mt-2 space-x-4">
+                <form th:action="@{/home/album/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="inline-flex items-center px-2 py-1 text-sm font-medium text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

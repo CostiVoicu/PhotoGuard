@@ -2,87 +2,87 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Lab. Model - Admin</title>
+    <title>Photo Guard - Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-100">
-
+<body class="min-h-screen bg-gray-50">
 <!-- Top Bar -->
-<header class="bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 text-white shadow-lg">
-    <div class="container mx-auto flex justify-between items-center p-4">
-        <!-- Application Name -->
-        <div class="text-2xl font-bold">Lab. Model</div>
-
-        <!-- Profile Section -->
-        <div x-data="{ open: false }" class="relative flex items-center space-x-4">
-            <span th:text="${#authentication.name}"/>
-            <div @click="open = !open" class="flex items-center space-x-1 cursor-pointer">
-                <!-- Profile Circle -->
-                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                    <!-- First Letter of the Principal -->
-                    <span class="text-gray-700 font-semibold"
-                          th:text="${#strings.toUpperCase(#authentication.name.substring(0,1))}"/>
+<header class="bg-white border-b border-gray-200">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <div class="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-indigo-700 text-transparent bg-clip-text">
+                    Photo Guard
                 </div>
-                <!-- Dropdown Arrow -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-200" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 9l-7 7-7-7"></path>
-                </svg>
             </div>
 
-            <!-- Submenu Dropdown -->
-            <div x-show="open" @click.away="open = false"
-                 class="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg text-gray-800 z-50">
+            <!-- Profile Dropdown -->
+            <div x-data="{ open: false }" class="relative">
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-700" th:text="${#authentication.name}"></span>
+                    <button @click="open = !open"
+                            class="flex items-center gap-2 bg-white p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-medium"
+                             th:text="${#strings.toUpperCase(#authentication.name.substring(0,1))}">
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                </div>
 
-                <ul class="py-0">
-                    <li>
-                        <a href="#"
-                           class="block px-4 py-2 hover:bg-indigo-500 hover:text-white rounded-t-lg">
-                            Profile Settings
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#"
-                           class="block px-4 py-2 hover:bg-indigo-500 hover:text-white">
-                            Configuration
-                        </a>
-                    </li>
-                    <li>
-                        <form th:action="@{/logout}" method="post" class="w-full">
-                            <button type="submit"
-                                    class="block w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-lg">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false"
+                     class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit"
+                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors">
+                            Sign out
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Layout -->
-<div class="flex flex-1">
+<div class="flex h-[calc(100vh-4rem)]">
     <!-- Sidebar -->
-    <nav class="w-64 bg-white shadow-lg">
-        <ul class="space-y-4 p-4">
-            <li>
-                <a th:href="@{/admin/dashboard}" class="block py-2 px-4 rounded hover:bg-indigo-500 hover:text-white">Dashboard</a>
-            </li>
-            <li>
-                <a th:href="@{/admin/users}" class="block py-2 px-4 rounded hover:bg-indigo-500 hover:text-white">User Management</a>
-            </li>
-            <li>
-                <a th:href="@{/admin/roles}" class="block py-2 px-4 rounded hover:bg-indigo-500 hover:text-white">Role Management</a>
-            </li>
-        </ul>
-    </nav>
+    <aside class="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+        <nav class="p-4 space-y-1">
+            <a th:href="@{/admin/dashboard}"
+               class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Dashboard
+            </a>
+            <a th:href="@{/admin/users}"
+               class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                User Management
+            </a>
+            <a th:href="@{/admin/roles}"
+               class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                Role Management
+            </a>
+        </nav>
+    </aside>
 
-    <!-- Content Area -->
-    <main class="flex-1 bg-gray-50 p-8">
-        <div layout:fragment="content"></div>
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-7xl mx-auto">
+            <div layout:fragment="content"></div>
+        </div>
     </main>
 </div>
 

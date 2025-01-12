@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-user.html}">
 <head>
   <title>Create Album</title>
 </head>
 <body>
+
+<div layout:fragment="content">
 <h1>Create Album</h1>
 <form action="/album/add" method="post">
   <!-- Hidden field for userId -->
@@ -18,5 +20,6 @@
   <button type="submit">Create Album</button>
 </form>
 <button onclick="window.location.href='/home';">Cancel</button>
+</div>
 </body>
 </html>

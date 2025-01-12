@@ -5,33 +5,63 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="bg-white rounded-lg shadow p-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">User Management</h1>
-        <table class="w-full border border-gray-200 rounded-lg">
-            <thead class="bg-indigo-600 text-white">
-            <tr>
-                <th class="px-4 py-2 text-left">Email</th>
-                <th class="px-4 py-2 text-left">Roles</th>
-                <th class="px-4 py-2 text-center">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}" class="border-b hover:bg-gray-50">
-                <td class="px-4 py-2" th:text="${user.email}"></td>
-                <td class="px-4 py-2">
-                    <ul>
-                        <li th:each="role : ${user.roles}" th:text="${role.name}" class="text-sm"></li>
-                    </ul>
-                </td>
-                <td class="px-4 py-2 text-center space-x-2">
-                    <a th:href="@{/admin/users/{id}/update-roles(id=${user.id})}"
-                       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 focus:outline-none">
-                        Update Roles
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">User Management</h1>
+            <p class="mt-1 text-sm text-gray-500">Manage user roles and permissions</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Roles
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="user : ${users}" class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-medium"
+                                 th:text="${#strings.toUpperCase(user.email.substring(0,1))}">
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900" th:text="${user.email}"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-wrap gap-2">
+                                <span th:each="role : ${user.roles}"
+                                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                                      th:text="${role.name}">
+                                </span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <a th:href="@{/admin/users/{id}/update-roles(id=${user.id})}"
+                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                            Update Roles
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

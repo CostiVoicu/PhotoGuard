@@ -1,47 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Edit Role</title>
-    <link rel="stylesheet" href="/path-to-your-css.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body>
-<h1>Edit Role and Permissions</h1>
-
-<!-- Display the role's name (readonly, not editable) -->
-<form th:action="@{/admin/roles/{id}/edit(id=${role.id})}" method="post">
-    <div>
-        <label for="roleName">Role Name:</label>
-        <span th:text="${role.name}" id="roleName"></span>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl p-8">
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">Edit Role</h1>
     </div>
 
-    <div>
-        <h3>Permissions:</h3>
-        <ul>
-            <li th:each="permission : ${permissions}">
-                <input type="checkbox"
-                       th:id="'permission-' + ${permission.id}"
-                       th:name="permissions"
-                       th:value="${permission.id}"
-                       th:checked="${assignedPermissionIds.contains(permission.id)}">
-                <label th:for="'permission-' + ${permission.id}" th:text="${permission.httpMethod} + ' ' + ${permission.url}"></label>
-            </li>
-        </ul>
-    </div>
+    <form th:action="@{/admin/roles/{id}/edit(id=${role.id})}" method="post" class="space-y-6">
 
-    <!-- Error Message if no permissions are selected -->
-    <div th:if="${errorMessage}" class="error">
-        <p th:text="${errorMessage}"></p>
-    </div>
+        <div>
+            <label for="roleName" class="block text-sm font-medium text-gray-700">Role Name:</label>
+            <div class="mt-1">
+                <span th:text="${role.name}" id="roleName" class="block w-full px-3 py-2 rounded-md bg-gray-200 text-gray-900"></span>
+            </div>
+        </div>
 
-    <div>
-        <button type="submit">Update Role</button>
-    </div>
+        <div>
+            <h3 class="font-medium text-gray-700 mb-2">Permissions:</h3>
+            <ul class="space-y-2">
+                <li th:each="permission : ${permissions}" class="flex items-center">
+                    <input type="checkbox"
+                           th:id="'permission-' + ${permission.id}"
+                           th:name="permissions"
+                           th:value="${permission.id}"
+                           th:checked="${assignedPermissionIds.contains(permission.id)}"
+                           class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-5 w-5 mr-2">
+                    <label th:for="'permission-' + ${permission.id}" th:text="${permission.httpMethod} + ' ' + ${permission.url}" class="text-gray-700"></label>
+                </li>
+            </ul>
+        </div>
 
-    <!-- Cancel button to go back to the roles page -->
-    <div>
-        <a href="/admin/roles" class="button">Cancel</a>
-    </div>
-</form>
+        <div th:if="${errorMessage}" class="text-red-500 mt-2">
+            <p th:text="${errorMessage}"></p>
+        </div>
 
+        <div class="flex justify-between mt-6">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition colors">
+                Update Role
+            </button>
+            <a href="/admin/roles" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition colors">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

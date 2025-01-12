@@ -22,50 +22,24 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.example.rest_api.database.usersdb.repository",
-        entityManagerFactoryRef = "primaryEntityManagerFactory",
-        transactionManagerRef = "primaryTransactionManager"
+        basePackages = "com.example.rest_api.database.albumsdb.repository",
+        entityManagerFactoryRef = "secondaryEntityManagerFactory",
+        transactionManagerRef = "secondaryTransactionManager"
 )
-public class DataSourceConfig {
-    @Autowired
-    Environment env;
-    @Primary
-    @Bean(name = "primaryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.primary")
-    public DataSource primaryDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("spring.datasource.primary.driver-class-name"));
-        dataSource.setUrl(env.getProperty("spring.datasource.primary.jdbc-url"));
-        dataSource.setUsername(env.getProperty("spring.datasource.primary.username"));
-        dataSource.setPassword(env.getProperty("spring.datasource.primary.password"));
-
-        return dataSource;
-    }
+public class SecondaryDataSourceConfig {
 
     @Autowired
-    Environment env1;
+    private Environment env;
+
     @Bean(name = "secondaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.secondary")
     public DataSource secondaryDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env1.getProperty("spring.datasource.secondary.driver-class-name"));
-        dataSource.setUrl(env1.getProperty("spring.datasource.secondary.jdbc-url"));
-        dataSource.setUsername(env1.getProperty("spring.datasource.secondary.username"));
-        dataSource.setPassword(env1.getProperty("spring.datasource.secondary.password"));
-
+        dataSource.setDriverClassName(env.getProperty("spring.datasource.secondary.driver-class-name"));
+        dataSource.setUrl(env.getProperty("spring.datasource.secondary.jdbc-url"));
+        dataSource.setUsername(env.getProperty("spring.datasource.secondary.username"));
+        dataSource.setPassword(env.getProperty("spring.datasource.secondary.password"));
         return dataSource;
-    }
-
-    @Primary
-    @Bean(name = "primaryEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
-            EntityManagerFactoryBuilder builder,
-            @Qualifier("primaryDataSource") DataSource dataSource) {
-        return builder
-                .dataSource(dataSource)
-                .packages("com.example.rest_api.database.usersdb")
-                .persistenceUnit("primary")
-                .build();
     }
 
     @Bean(name = "secondaryEntityManagerFactory")
@@ -74,16 +48,9 @@ public class DataSourceConfig {
             @Qualifier("secondaryDataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("com.example.rest_api.database.albumdb")
+                .packages("com.example.rest_api.database.albumsdb")
                 .persistenceUnit("secondary")
                 .build();
-    }
-
-    @Primary
-    @Bean(name = "primaryTransactionManager")
-    public PlatformTransactionManager primaryTransactionManager(
-            @Qualifier("primaryEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
     }
 
     @Bean(name = "secondaryTransactionManager")
@@ -92,3 +59,4 @@ public class DataSourceConfig {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }
+

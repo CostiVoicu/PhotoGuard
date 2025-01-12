@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Entity
 @Getter
@@ -30,4 +31,10 @@ public class ImageEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Transient
+    public String getBase64Image() {
+        // Convert the image data to a Base64-encoded string
+        String base64Image = Base64.getEncoder().encodeToString(data);
+        return "data:image/jpeg;base64," + base64Image; // Assuming the images are JPEG, adjust content type if needed
+    }
 }

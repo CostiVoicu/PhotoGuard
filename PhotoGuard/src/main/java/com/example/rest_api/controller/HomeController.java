@@ -48,12 +48,12 @@ public class HomeController {
         return "user/home";
     }
 
-    @GetMapping("/albums/create")
+    @GetMapping("/album/create")
     public String showCreateAlbumForm() {
-        return "albums/create";
+        return "album/create";
     }
 
-    @PostMapping("/albums/{id}/delete")
+    @PostMapping("/album/{id}/delete")
     public String deleteAlbum(@PathVariable("id") Long id) {
         albumService.deleteAlbumById(id);
         return "redirect:/home";

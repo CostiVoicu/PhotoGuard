@@ -5,6 +5,13 @@
     <link rel="stylesheet" href="/path-to-your-css.css">
 </head>
 <body>
+
+<form th:action="@{/logout}" method="post" class="w-full">
+    <button type="submit">
+        Logout
+    </button>
+</form>
+
 <h1>Welcome, <span th:text="${username}">User</span>!</h1>
 
 <!-- Search Bar -->
@@ -13,15 +20,17 @@
     <button type="submit">Search</button>
 </form>
 
-<button onclick="window.location.href='/home/albums/create';">Create Album</button>
+<button onclick="window.location.href='/home/album/create';">Create Album</button>
 
 <!-- Album List -->
 <h2>Album List</h2>
 <ul>
     <li th:each="album : ${albums}">
-        <h3 th:text="${album.name}"></h3>
+        <h3>
+            <a th:href="@{/album/{name}(name=${album.name})}" th:text="${album.name}"></a>
+        </h3>
         <p th:text="${album.description}"></p>
-        <form th:action="@{/home/albums/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
+        <form th:action="@{/home/album/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
             <button type="submit">Delete</button>
         </form>
     </li>

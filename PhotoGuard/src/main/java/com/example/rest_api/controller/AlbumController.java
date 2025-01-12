@@ -6,7 +6,10 @@ import com.example.rest_api.database.usersdb.model.UserEntity;
 import com.example.rest_api.service.AlbumService;
 import com.example.rest_api.service.UserService;
 import com.example.rest_api.service.RoleService;
+import com.example.rest_api.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/albums")
+@RequestMapping("/album")
 public class AlbumController {
 
     @Autowired
@@ -29,12 +32,8 @@ public class AlbumController {
     @Autowired
     private RoleService roleService;
 
-    // Display all albums
-    @GetMapping
-    public String listAlbums(Model model) {
-        model.addAttribute("albums", albumService.findAllAlbums());
-        return "albums/list";
-    }
+    @Autowired
+    private ImageService imageService;
 
     // Add a new album
     @PostMapping("/add")
@@ -49,12 +48,11 @@ public class AlbumController {
         Long userId = user.get().getId();  // Get the userId from the User entity
 
         AlbumEntity album = new AlbumEntity();
-        String finalName = name.toUpperCase().replace(" ", "_") + "_ALBUM";
-        album.setName(finalName);
+        name = name.toLowerCase().replace(" ", "_");
+        album.setName(name);
         album.setDescription(description);
         albumService.addAlbum(album);
 
-        name = name.toLowerCase().replace(" ", "_");
         roleService.createAndAssignRolesToUser(userId, name);
 
         return "redirect:/home";
@@ -64,29 +62,63 @@ public class AlbumController {
     @PostMapping("/{id}/delete")
     public String deleteAlbum(@PathVariable Long id) {
         albumService.deleteAlbumById(id);
-        return "redirect:/albums";
+        return "redirect:/album";
     }
 
-    // Add an image to an album
-    @PostMapping("/{id}/add-image")
-    public String addImageToAlbum(
-            @PathVariable Long id,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            ImageEntity image = new ImageEntity();
-            image.setName(file.getOriginalFilename());
-            image.setData(file.getBytes());
-            albumService.addImageToAlbum(id, image);
+    @GetMapping("/{name}")
+    public String getAlbumDetails(@PathVariable("name") String albumName, Model model) {
+        // Assuming you have a service to fetch album details by name
+        AlbumEntity album = albumService.findByName(albumName);
+
+        if (album != null) {
+            model.addAttribute("album", album);  // Add the album details to the model
+            return "album/details";
+        } else {
+            // Handle case where album is not found
+            return "redirect:/home";  // Redirect to home if album not found
         }
-        return "redirect:/albums";
     }
 
-    // Delete an image from an album
-    @PostMapping("/{albumId}/delete-image/{imageId}")
-    public String deleteImage(
-            @PathVariable Long albumId,
-            @PathVariable Long imageId) {
-        albumService.deleteImageFromAlbum(imageId);
-        return "redirect:/albums";
+    // Upload image to album
+    @PostMapping("/{name}/upload_image")
+    public String uploadImage(@PathVariable("name") String name,
+                              @RequestParam("file") MultipartFile file) throws IOException {
+
+        // Find the album by name using the AlbumService
+        AlbumEntity album = albumService.findByName(name);
+
+        // Save the image using the ImageService
+        imageService.saveImage(album, file.getBytes(), file.getOriginalFilename());
+
+        // Redirect to the album's detail page
+        return "redirect:/album/" + album.getName();
     }
+
+    // Serve image by id
+    @GetMapping("/images/{id}")
+    @ResponseBody
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        // Fetch the image by ID
+        ImageEntity image = imageService.getImageById(id);
+        if (image != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // You can adjust the media type based on the image format
+                    .body(image.getData());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Delete image
+    @PostMapping("/images/{imageId}/delete")
+    public String deleteImage(@PathVariable Long imageId, @RequestParam Long albumId) {
+        // Delete the image using the ImageService
+        imageService.deleteImage(imageId);
+
+        // Fetch the album by its ID to get the name
+        AlbumEntity album = albumService.getAlbumById(albumId).get();
+
+        // Redirect to the album page using the album name
+        return "redirect:/album/" + album.getName();
+    }
+
 }

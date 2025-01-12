@@ -14,4 +14,8 @@ import java.util.List;
 @Repository
 public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ImageEntity i WHERE i.id = :id")
+    void deleteImageById(Long id);
 }

@@ -4,7 +4,6 @@ import com.example.rest_api.database.albumsdb.model.AlbumEntity;
 import com.example.rest_api.database.albumsdb.model.ImageEntity;
 import com.example.rest_api.database.albumsdb.repository.AlbumRepository;
 import com.example.rest_api.database.albumsdb.repository.ImageRepository;
-import org.hibernate.annotations.NaturalId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,9 @@ public class AlbumService {
         albumRepository.deleteById(id);
     }
 
+    public AlbumEntity findByName(String name){
+        return albumRepository.findByName(name);
+    }
     // Find an album by ID
     public Optional<AlbumEntity> findAlbumById(Long id) {
         return albumRepository.findById(id);
@@ -57,5 +59,9 @@ public class AlbumService {
 
     public List<AlbumEntity> searchAlbumsByName(String search) {
         return albumRepository.findByNameContainingIgnoreCase(search);
+    }
+
+    public Optional<AlbumEntity> getAlbumById(Long albumId) {
+        return albumRepository.findById(albumId);
     }
 }

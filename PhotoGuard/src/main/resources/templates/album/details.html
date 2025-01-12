@@ -8,15 +8,16 @@
 <p th:text="${album.description}"></p>
 
 <h2>Images</h2>
-<form th:action="@{/albums/{id}/images(id=${album.id})}" method="post" enctype="multipart/form-data">
+<form th:action="@{/album/{name}/upload_image(name=${album.name})}" method="post" enctype="multipart/form-data">
   <input type="file" name="file" required>
   <button type="submit">Add Image</button>
 </form>
 
 <ul>
   <li th:each="image : ${album.images}">
-    <img th:src="@{/images/{id}(id=${image.id})}" alt="Image">
-    <form th:action="@{/images/{imageId}/delete(imageId=${image.id})}" method="post">
+    <img th:src="${image.base64Image}" alt="Image" style="max-width: 300px; height: auto;"/>
+
+    <form th:action="@{/album/images/{imageId}/delete(imageId=${image.id})}" method="post">
       <input type="hidden" name="albumId" th:value="${album.id}">
       <button type="submit">Delete</button>
     </form>

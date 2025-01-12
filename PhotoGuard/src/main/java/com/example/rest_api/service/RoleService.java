@@ -102,7 +102,7 @@ public class RoleService {
         List<PermissionEntity> permissions = new ArrayList<>();
 
         // Define the URL path based on the album name
-        String albumPath = "/album/" + albumName;
+        String albumPath = "/album/" + albumName + "/**";
 
         // Create GET permission
         PermissionEntity getPermission = new PermissionEntity();

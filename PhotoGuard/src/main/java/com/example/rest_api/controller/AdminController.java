@@ -1,7 +1,9 @@
 package com.example.rest_api.controller;
 
+import com.example.rest_api.database.usersdb.model.PermissionEntity;
 import com.example.rest_api.database.usersdb.model.RoleEntity;
 import com.example.rest_api.database.usersdb.model.UserEntity;
+import com.example.rest_api.service.PermissionService;
 import com.example.rest_api.service.RoleService;
 import com.example.rest_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("admin")
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
+    private final PermissionService permissionService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService, PermissionService permissionService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.permissionService = permissionService;
     }
 
     @GetMapping("/dashboard")
@@ -64,11 +69,5 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("message", "Roles updated successfully!");
         return "redirect:/admin/users";
-    }
-
-    @PostMapping("/roles/{id}/delete")
-    public String deleteRole(@PathVariable Long id) {
-        roleService.deleteRoleById(id);  // Assuming this service method deletes the role
-        return "redirect:/admin/roles";  // Redirect back to the roles page
     }
 }

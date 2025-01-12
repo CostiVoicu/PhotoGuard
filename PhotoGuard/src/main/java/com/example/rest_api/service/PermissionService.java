@@ -5,6 +5,8 @@ import com.example.rest_api.database.usersdb.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PermissionService {
     private final PermissionRepository permissionRepository;
@@ -14,7 +16,15 @@ public class PermissionService {
         this.permissionRepository = permissionRepository;
     }
 
+    public List<PermissionEntity> findAllAlbumsPermissions() {
+        return permissionRepository.findAllAlbumsPermissions();
+    }
+
     public void save(PermissionEntity permissionEntity) {
         this.permissionRepository.save(permissionEntity);
+    }
+
+    public List<PermissionEntity> findAllById(List<Long> ids) {
+        return permissionRepository.findAllById(ids);
     }
 }

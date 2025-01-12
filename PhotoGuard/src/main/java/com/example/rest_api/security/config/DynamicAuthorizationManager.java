@@ -28,23 +28,28 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
         String requestUrl = context.getRequest().getRequestURI();
         String requestMethod = context.getRequest().getMethod();
 
+        // Retrieve all roles (since roles and permissions are now linked through RolePermissionEntity)
         List<RoleEntity> roles = roleService.findAll();
 
+        // Loop through all roles to check if the authenticated user has the necessary role and permission
         for (RoleEntity role : roles) {
             if (authentication.get().getAuthorities().stream()
                     .anyMatch(auth -> auth.getAuthority().equals(role.getName()))) {
 
-                boolean hasPermission = role.getPermissions().stream()
-                        .anyMatch(permission ->
-                                        pathMatcher.match(permission.getUrl(), requestUrl) &&
-                                        permission.getHttpMethod().equalsIgnoreCase(requestMethod));
-
+                // Now check permissions through the rolePermissions collection
+                boolean hasPermission = role.getRolePermissions().stream()
+                        .anyMatch(rolePermission ->
+                                pathMatcher.match(rolePermission.getPermission().getUrl(), requestUrl) &&
+                                        rolePermission.getPermission().getHttpMethod().equalsIgnoreCase(requestMethod));
 
                 if (hasPermission) {
-                    return new AuthorizationDecision(true);
+                    return new AuthorizationDecision(true); // User has permission for the requested resource
                 }
             }
         }
+
+        // If no matching permissions found for any role, deny access
         return new AuthorizationDecision(false);
     }
+
 }

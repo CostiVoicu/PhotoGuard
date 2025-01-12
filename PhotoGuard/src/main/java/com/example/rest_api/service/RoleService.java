@@ -1,6 +1,7 @@
 package com.example.rest_api.service;
 
-import com.example.rest_api.database.usersdb.model.RoleEntity;
+import com.example.rest_api.database.usersdb.model.*;
+import com.example.rest_api.database.usersdb.repository.PermissionRepository;
 import com.example.rest_api.database.usersdb.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,12 @@ import java.util.Optional;
 @Service
 public class RoleService {
     private RoleRepository roleRepository;
+    private PermissionRepository permissionRepository;
 
     @Autowired
-    public RoleService(RoleRepository roleRepository) {
+    public RoleService(RoleRepository roleRepository, PermissionRepository permissionRepository) {
         this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     public void save(RoleEntity role) {
@@ -32,8 +35,13 @@ public class RoleService {
     public Optional<RoleEntity> findByName(String name) {
         return roleRepository.findByName(name);
     }
+    public Optional<RoleEntity> findById(Long id) {
+        return roleRepository.findById(id);
+    }
 
     public List<RoleEntity> findAll() {
         return roleRepository.findAll();
     }
+
+
 }

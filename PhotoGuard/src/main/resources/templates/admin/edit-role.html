@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Role</title>
+    <link rel="stylesheet" href="/path-to-your-css.css">
+</head>
+<body>
+<h1>Edit Role and Permissions</h1>
+
+<!-- Display the role's name (readonly, not editable) -->
+<form th:action="@{/admin/roles/{id}/edit(id=${role.id})}" method="post">
+    <div>
+        <label for="roleName">Role Name:</label>
+        <span th:text="${role.name}" id="roleName"></span>
+    </div>
+
+    <div>
+        <h3>Permissions:</h3>
+        <ul>
+            <li th:each="permission : ${permissions}">
+                <input type="checkbox"
+                       th:id="'permission-' + ${permission.id}"
+                       th:name="permissions"
+                       th:value="${permission.id}"
+                       th:checked="${assignedPermissionIds.contains(permission.id)}">
+                <label th:for="'permission-' + ${permission.id}" th:text="${permission.httpMethod} + ' ' + ${permission.url}"></label>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Error Message if no permissions are selected -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div>
+        <button type="submit">Update Role</button>
+    </div>
+
+    <!-- Cancel button to go back to the roles page -->
+    <div>
+        <a href="/admin/roles" class="button">Cancel</a>
+    </div>
+</form>
+
+</body>
+</html>

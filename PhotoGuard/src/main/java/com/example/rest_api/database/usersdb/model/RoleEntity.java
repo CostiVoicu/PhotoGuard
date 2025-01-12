@@ -11,7 +11,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode
+@Getter
+@Setter
+@EqualsAndHashCode
 @Table(name = "role")
 public class RoleEntity implements GrantedAuthority {
 
@@ -26,10 +28,10 @@ public class RoleEntity implements GrantedAuthority {
     private Collection<UserEntity> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<PermissionEntity> permissions = new ArrayList<>();
+    private List<RolePermissionEntity> rolePermissions = new ArrayList<>();
 
     public void setRole(Role role) {
-        this.name= role.name();
+        this.name = role.name();
     }
 
     @Override

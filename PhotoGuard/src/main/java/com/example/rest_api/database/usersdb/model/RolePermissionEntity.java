@@ -5,17 +5,23 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "permissions")
-public class PermissionEntity {
+@Table(name = "role_permission")
+public class RolePermissionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String httpMethod;
-    private String url;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
+
+    @ManyToOne
+    @JoinColumn(name = "permission_id", nullable = false)
+    private PermissionEntity permission;
 }

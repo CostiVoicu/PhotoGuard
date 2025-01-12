@@ -24,7 +24,7 @@
 
   <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <li th:each="image : ${album.images}" class="rounded-md overflow-hidden shadow-sm">
-      <img th:src="${image.base64Image}" alt="Image" class="w-full h-48 object-cover"> 
+      <img th:src="${image.base64Image}" alt="Image" class="w-full h-48 object-cover">
       <div class="flex items-center justify-end px-4 py-2 bg-gray-100">
         <form th:action="@{/album/images/{imageId}/delete(imageId=${image.id})}" method="post">
           <input type="hidden" name="albumId" th:value="${album.id}">

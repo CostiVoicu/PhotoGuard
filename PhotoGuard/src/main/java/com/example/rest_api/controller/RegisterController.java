@@ -55,7 +55,7 @@ public class RegisterController {
         user.setUsername(user.getUsername());
         user.setIsOAuthAccount(false); // Classic registration
 
-        Optional<RoleEntity> optionalRole = roleService.findByName(Role.DEFAULT.name());
+        Optional<RoleEntity> optionalRole = roleService.findByName(Role.USER.name());
         optionalRole.ifPresent(user::addRole);
 
         userService.save(user);

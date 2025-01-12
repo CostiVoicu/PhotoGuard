@@ -61,18 +61,44 @@ public class DataInitializer implements ApplicationRunner {
         Boolean isRoleUserInDb = roleService.existsByName(user.getName());
         if (!isRoleUserInDb) {
             roleService.save(user);
-            PermissionEntity permissionEntity = new PermissionEntity();
-            permissionEntity.setHttpMethod("GET");
-            permissionEntity.setUrl("/home");
-            permissionService.save(permissionEntity);
 
-            // Create the RolePermissionEntity to link the role and the permission
-            RolePermissionEntity rolePermissionEntity = new RolePermissionEntity();
-            rolePermissionEntity.setRole(user);
-            rolePermissionEntity.setPermission(permissionEntity);
+            // Create and save the first PermissionEntity (GET /home/**)
+            PermissionEntity permissionEntity1 = new PermissionEntity();
+            permissionEntity1.setHttpMethod("GET");
+            permissionEntity1.setUrl("/home/**");
+            permissionService.save(permissionEntity1);
 
-            // Save the RolePermissionEntity to link the role and the permission
-            rolePermissionService.save(rolePermissionEntity);
+            // Create and save the second PermissionEntity (POST /home/**)
+            PermissionEntity permissionEntity2 = new PermissionEntity();
+            permissionEntity2.setHttpMethod("POST");
+            permissionEntity2.setUrl("/home/**");
+            permissionService.save(permissionEntity2);
+
+            // Create and save the third PermissionEntity (POST /album/**)
+            PermissionEntity permissionEntity3 = new PermissionEntity();
+            permissionEntity3.setHttpMethod("POST");
+            permissionEntity3.setUrl("/album/**");
+            permissionService.save(permissionEntity3);
+
+            // Create and save RolePermissionEntities to link the role with each permission
+
+            // Link user with the first permission (GET /home/**)
+            RolePermissionEntity rolePermissionEntity1 = new RolePermissionEntity();
+            rolePermissionEntity1.setRole(user);
+            rolePermissionEntity1.setPermission(permissionEntity1);
+            rolePermissionService.save(rolePermissionEntity1);
+
+            // Link user with the second permission (POST /home/**)
+            RolePermissionEntity rolePermissionEntity2 = new RolePermissionEntity();
+            rolePermissionEntity2.setRole(user);
+            rolePermissionEntity2.setPermission(permissionEntity2);
+            rolePermissionService.save(rolePermissionEntity2);
+
+            // Link user with the third permission (POST /album/**)
+            RolePermissionEntity rolePermissionEntity3 = new RolePermissionEntity();
+            rolePermissionEntity3.setRole(user);
+            rolePermissionEntity3.setPermission(permissionEntity3);
+            rolePermissionService.save(rolePermissionEntity3);
         }
 
         Boolean isRoleDefaultInDb = roleService.existsByName(defaultRole.getName());

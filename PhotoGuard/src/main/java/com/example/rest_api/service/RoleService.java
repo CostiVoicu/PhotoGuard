@@ -1,5 +1,7 @@
 package com.example.rest_api.service;
 
+import com.example.rest_api.database.albumsdb.model.AlbumEntity;
+import com.example.rest_api.database.albumsdb.repository.AlbumRepository;
 import com.example.rest_api.database.usersdb.model.*;
 import com.example.rest_api.database.usersdb.repository.PermissionRepository;
 import com.example.rest_api.database.usersdb.repository.RoleRepository;
@@ -69,19 +71,25 @@ public class RoleService {
         // Save the permissions first
         permissions.forEach(permission -> permissionRepository.save(permission));
 
-        // Assign only the first permission (GET) to roleAlbum
+        // Assign only the first permission (GET) to roleAlbum if it's not already assigned
         PermissionEntity getPermission = permissions.get(0); // First permission (GET)
-        RolePermissionEntity rolePermissionAlbum = new RolePermissionEntity();
-        rolePermissionAlbum.setRole(roleAlbum);
-        rolePermissionAlbum.setPermission(getPermission);
-        roleAlbum.getRolePermissions().add(rolePermissionAlbum); // Add the permission to the role
+        if (!roleAlbum.getRolePermissions().stream()
+                .anyMatch(rolePermission -> rolePermission.getPermission().equals(getPermission))) {
+            RolePermissionEntity rolePermissionAlbum = new RolePermissionEntity();
+            rolePermissionAlbum.setRole(roleAlbum);
+            rolePermissionAlbum.setPermission(getPermission);
+            roleAlbum.getRolePermissions().add(rolePermissionAlbum); // Add the permission to the role
+        }
 
-        // Assign all permissions to roleAlbumAdmin
+        // Assign all permissions to roleAlbumAdmin, but avoid duplicate assignments
         for (PermissionEntity permission : permissions) {
-            RolePermissionEntity rolePermissionAdmin = new RolePermissionEntity();
-            rolePermissionAdmin.setRole(roleAlbumAdmin);
-            rolePermissionAdmin.setPermission(permission);
-            roleAlbumAdmin.getRolePermissions().add(rolePermissionAdmin); // Add each permission to the role
+            if (!roleAlbumAdmin.getRolePermissions().stream()
+                    .anyMatch(rolePermission -> rolePermission.getPermission().equals(permission))) {
+                RolePermissionEntity rolePermissionAdmin = new RolePermissionEntity();
+                rolePermissionAdmin.setRole(roleAlbumAdmin);
+                rolePermissionAdmin.setPermission(permission);
+                roleAlbumAdmin.getRolePermissions().add(rolePermissionAdmin); // Add each permission to the role
+            }
         }
 
         // Save the roles with their permissions
@@ -97,6 +105,7 @@ public class RoleService {
         user.setRoles(roles); // No need to convert List to Set
         userRepository.save(user); // Save the user with the assigned roles
     }
+
 
     public List<PermissionEntity> createPermissionsForAlbum(String albumName) {
         List<PermissionEntity> permissions = new ArrayList<>();

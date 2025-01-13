@@ -20,8 +20,17 @@ public class AlbumService {
 
     // Add a new album
     public AlbumEntity addAlbum(AlbumEntity album) {
+        // Check if an album with the same name already exists
+        AlbumEntity existingAlbum = albumRepository.findByName(album.getName());
+
+        if (existingAlbum != null) {
+            return existingAlbum;
+        }
+
+        // If the album doesn't exist, save the new album
         return albumRepository.save(album);
     }
+
 
     // Delete an album by ID
     public void deleteAlbumById(Long id) {

@@ -6,20 +6,31 @@
 <body>
 
 <div layout:fragment="content">
-<h1>Create Album</h1>
-<form action="/album/add" method="post">
-  <!-- Hidden field for userId -->
-  <input type="hidden" name="userId" th:value="${userId}">
 
-  <label for="albumName">Album Name:</label>
-  <input type="text" id="albumName" name="name" required>
+  <header class="flex items-center justify-between mb-8">
+    <h1>Create Album</h1>
+    <button onclick="window.location.href='/home';" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+      Cancel
+    </button>
+  </header>
 
-  <label for="albumDescription">Description:</label>
-  <textarea id="albumDescription" name="description" required></textarea>
+  <form action="/album/add" method="post">
+    <input type="hidden" name="userId" th:value="${userId}">
 
-  <button type="submit">Create Album</button>
-</form>
-<button onclick="window.location.href='/home';">Cancel</button>
+    <div class="mb-4">
+      <label for="albumName" class="block text-sm font-medium text-gray-700">Album Name:</label>
+      <input type="text" id="albumName" name="name" required class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+    </div>
+
+    <div class="mb-4">
+      <label for="albumDescription" class="block text-sm font-medium text-gray-700">Description:</label>
+      <textarea id="albumDescription" name="description" required class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"></textarea>
+    </div>
+
+    <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+      Create Album
+    </button>
+  </form>
 </div>
 </body>
 </html>

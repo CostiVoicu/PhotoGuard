@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<head>
+    <title>Permissions Management</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">Permission Management</h1>
+            <p class="mt-1 text-sm text-gray-500">Manage permissions</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Http Method
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Url
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="permission : ${permissions}" class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900" th:text="${permission.httpMethod}"></div>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900" th:text="${permission.url}"></div>
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        <form th:action="@{/admin/permissions/{id}/edit(id=${permission.id})}" method="get" class="inline-block">
+                            <button type="submit"
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                Edit
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/permissions/{id}/delete(id=${permission.id})}" method="post" class="inline-block" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="_method" value="delete"/>
+
+                            <button type="submit"
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    function confirmDelete() {
+        // Show a confirmation popup
+        return confirm("Are you sure you want to delete this permission?");
+    }
+</script>

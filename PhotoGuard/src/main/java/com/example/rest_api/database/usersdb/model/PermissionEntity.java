@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -18,4 +21,7 @@ public class PermissionEntity {
 
     private String httpMethod;
     private String url;
+
+    @OneToMany(mappedBy = "permission", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<RolePermissionEntity> rolePermissions = new HashSet<>();
 }

@@ -1,11 +1,12 @@
 package com.example.rest_api.service;
 
-import com.example.rest_api.database.albumsdb.model.AlbumEntity;
-import com.example.rest_api.database.albumsdb.repository.AlbumRepository;
 import com.example.rest_api.database.usersdb.model.*;
 import com.example.rest_api.database.usersdb.repository.PermissionRepository;
+import com.example.rest_api.database.usersdb.repository.RolePermissionRepository;
 import com.example.rest_api.database.usersdb.repository.RoleRepository;
 import com.example.rest_api.database.usersdb.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +17,30 @@ public class RoleService {
     private RoleRepository roleRepository;
     private PermissionRepository permissionRepository;
     private final UserRepository userRepository;
+    private final RolePermissionRepository rolePermissionRepository;
 
     @Autowired
-    public RoleService(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository) {
+    public RoleService(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, RolePermissionRepository rolePermissionRepository) {
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
         this.userRepository = userRepository;
+        this.rolePermissionRepository = rolePermissionRepository;
     }
 
     public void save(RoleEntity role) {
         this.roleRepository.save(role);
     }
 
-    public void deleteRoleById(Long id) {
-        roleRepository.deleteById(id);
+    @Transactional
+    public void deleteRoleById(Long roleId) {
+        // Remove role from users first
+        userRepository.removeUserRoleAssociations(roleId);
+
+        // Delete role permissions
+        rolePermissionRepository.deleteByRoleId(roleId);
+
+        // Finally delete the role
+        roleRepository.deleteById(roleId);
     }
 
     public Boolean existsByName(String name) {
@@ -105,7 +116,6 @@ public class RoleService {
         user.setRoles(roles); // No need to convert List to Set
         userRepository.save(user); // Save the user with the assigned roles
     }
-
 
     public List<PermissionEntity> createPermissionsForAlbum(String albumName) {
         List<PermissionEntity> permissions = new ArrayList<>();

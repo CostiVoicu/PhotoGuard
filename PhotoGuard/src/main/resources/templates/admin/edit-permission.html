@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Permission</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl p-8">
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">Edit Permission</h1>
+    </div>
+
+    <form th:action="@{/admin/permissions/{id}/edit(id=${permission.id})}" method="post" class="space-y-6">
+
+        <!-- HTTP Method Input -->
+        <div>
+            <label for="httpMethod" class="block text-sm font-medium text-gray-700">Permission HTTP Method:</label>
+            <div class="mt-1">
+                <select
+                        id="httpMethod"
+                        name="httpMethod"
+                        class="block w-full px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                    <option value="GET" th:selected="${permission.httpMethod == 'GET'}">GET</option>
+                    <option value="POST" th:selected="${permission.httpMethod == 'POST'}">POST</option>
+                    <option value="PUT" th:selected="${permission.httpMethod == 'PUT'}">PUT</option>
+                    <option value="DELETE" th:selected="${permission.httpMethod == 'DELETE'}">DELETE</option>
+                    <option value="PATCH" th:selected="${permission.httpMethod == 'PATCH'}">PATCH</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- URL Input -->
+        <div>
+            <label for="url" class="block text-sm font-medium text-gray-700">Permission URL:</label>
+            <div class="mt-1">
+                <input
+                        type="text"
+                        id="url"
+                        name="url"
+                        class="block w-full px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        placeholder="Enter URL"
+                        th:value="${permission.url}" />
+            </div>
+        </div>
+
+        <div th:if="${errorMessage}" class="text-red-500 mt-2">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div class="flex justify-between mt-6">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition colors">
+                Update Permission
+            </button>
+            <a href="/admin/permissions" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition colors">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

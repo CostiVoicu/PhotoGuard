@@ -4,7 +4,7 @@ import com.example.rest_api.database.usersdb.model.*;
 import com.example.rest_api.service.PermissionService;
 import com.example.rest_api.service.RoleService;
 import com.example.rest_api.service.UserService;
-import com.example.rest_api.database.usersdb.service.RolePermissionService;
+import com.example.rest_api.service.RolePermissionService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;

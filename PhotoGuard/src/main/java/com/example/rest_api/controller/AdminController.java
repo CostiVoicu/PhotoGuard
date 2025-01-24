@@ -48,6 +48,12 @@ public class AdminController {
         return "admin/roles";
     }
 
+    @GetMapping("/permissions")
+    public String permissionManagement(Model model){
+        model.addAttribute("permissions", permissionService.findAll());
+        return "admin/permissions";
+    }
+
     @GetMapping("/users/{id}/update-roles")
     public String updateUserRolesPage(@PathVariable Long id, Model model) {
         UserEntity user = userService.findById(id); // Assuming this method fetches the user by ID

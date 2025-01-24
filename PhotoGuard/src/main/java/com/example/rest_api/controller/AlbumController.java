@@ -3,6 +3,7 @@ package com.example.rest_api.controller;
 import com.example.rest_api.database.albumsdb.model.AlbumEntity;
 import com.example.rest_api.database.albumsdb.model.ImageEntity;
 import com.example.rest_api.database.usersdb.model.UserEntity;
+import com.example.rest_api.security.AuthenticatedUser;
 import com.example.rest_api.service.AlbumService;
 import com.example.rest_api.service.UserService;
 import com.example.rest_api.service.RoleService;
@@ -10,6 +11,10 @@ import com.example.rest_api.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -120,5 +126,4 @@ public class AlbumController {
         // Redirect to the album page using the album name
         return "redirect:/album/" + album.getName();
     }
-
 }

@@ -18,10 +18,10 @@ public class RolePermissionEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = true)
     private RoleEntity role;
 
     @ManyToOne
-    @JoinColumn(name = "permission_id", nullable = false)
+    @JoinColumn(name = "permission_id", nullable = true)
     private PermissionEntity permission;
 }

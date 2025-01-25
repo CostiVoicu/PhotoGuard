@@ -19,7 +19,7 @@
   </header>
 
   <div class="flex items-center mt-2 space-x-4">
-    <form th:action="@{/home/album/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
+    <form th:action="@{/album/{id}/delete(id=${album.id})}" method="post" style="display: inline;">
       <button type="submit" class="inline-flex items-center px-2 py-1 text-sm font-medium text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
         Delete Album
       </button>

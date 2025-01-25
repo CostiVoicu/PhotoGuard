@@ -64,6 +64,14 @@ public class AlbumController {
         return "redirect:/home";
     }
 
+    public AuthenticatedUser getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof AuthenticatedUser) {
+            return (AuthenticatedUser) authentication.getPrincipal();
+        }
+        throw new IllegalStateException("No authenticated user found");
+    }
+
     // Delete an album
     @PostMapping("/{id}/delete")
     public String deleteAlbum(@PathVariable Long id) {

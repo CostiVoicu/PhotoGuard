@@ -1,12 +1,17 @@
 package com.example.rest_api.controller;
 
 import com.example.rest_api.database.albumsdb.model.AlbumEntity;
+import com.example.rest_api.database.usersdb.model.UserEntity;
 import com.example.rest_api.database.usersdb.repository.UserRepository;
 import com.example.rest_api.security.AuthenticatedUser;
 import com.example.rest_api.service.AlbumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,22 +33,28 @@ public class HomeController {
     }
 
     @GetMapping
-    public String home(@RequestParam(value = "search", required = false) String search, Model model, Principal principal) {
-        if (principal instanceof AuthenticatedUser authenticatedUser) {
-            model.addAttribute("username", authenticatedUser.getEmail());
-        } else {
-            model.addAttribute("username", principal.getName());
-        }
+    public String home(@RequestParam(value = "search", required = false) String search,
+                       Model model,
+                       Principal principal) {
+        UserEntity currentUser = userRepository.findByEmail(principal.getName()).get();
+
+        model.addAttribute("username", principal.getName());
 
         // Handle search or list all albums
-        List<AlbumEntity> albums;
-        if (search != null && !search.isEmpty()) {
-            albums = albumService.searchAlbumsByName(search);
-        } else {
-            albums = albumService.findAllAlbums();
-        }
+        List<AlbumEntity> albums = search != null && !search.isEmpty()
+                ? albumService.searchAlbumsByName(search)
+                : albumService.findAllAlbums();
+
         model.addAttribute("albums", albums);
         model.addAttribute("search", search);
+
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                currentAuth.getPrincipal(),
+                currentAuth.getCredentials(),
+                currentUser.getAuthorities()
+        );
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         return "user/home";
     }
@@ -58,5 +69,4 @@ public class HomeController {
         albumService.deleteAlbumById(id);
         return "redirect:/home";
     }
-
 }

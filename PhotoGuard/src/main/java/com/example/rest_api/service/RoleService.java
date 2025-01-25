@@ -80,7 +80,7 @@ public class RoleService {
         List<PermissionEntity> permissions = createPermissionsForAlbum(albumName);
 
         // Save the permissions first
-        permissions.forEach(permission -> permissionRepository.save(permission));
+        permissionRepository.saveAll(permissions);
 
         // Assign only the first permission (GET) to roleAlbum if it's not already assigned
         PermissionEntity getPermission = permissions.get(0); // First permission (GET)
